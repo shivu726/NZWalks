@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using NZWalks.Models.Domain;
 using NZWalks.Models.Domain.DTO;
 using NZWalks.Repository;
 
@@ -45,6 +46,125 @@ namespace NZWalks.Controllers
             var regionModel = _mapper.Map<List<RegionModel>>(region);
 
             return Ok(regionModel);
+        }
+
+        [HttpGet]
+        [Route("{Id:guid}")]
+        [ActionName("GetRegionById")]
+        public async Task<IActionResult> GetRegionById(Guid Id)
+        {
+            var region = await _regionRepository.GetRegionAsync(Id);
+
+
+            if (region == null)
+            {
+                return NotFound();
+            }
+
+            var regionModel = _mapper.Map<RegionModel>(region);
+
+            return Ok(regionModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddRegionAsync(AddRegionModel addRegion)
+        {
+            // Request (DTO) to domain model...
+
+            var region = new Region()
+            {
+                Code = addRegion.Code,
+                Area = addRegion.Area,
+                Name = addRegion.Name,
+                Lat = addRegion.Lat,
+                Long = addRegion.Long,
+                Population = addRegion.Population
+            };
+
+            // Pass details to repository...
+            region = await _regionRepository.AddRegionAsync(region);
+
+            // conver back to DTO..
+
+            var regionModel = new RegionModel()
+            {
+                RegID = region.RegID,
+                Code = region.Code,
+                Area = region.Area,
+                Name = region.Name,
+                Lat = region.Lat,
+                Long = region.Long,
+                Population = region.Population
+            };
+
+            return CreatedAtAction(nameof(GetRegionById), new { Id = regionModel.RegID }, regionModel);
+        }
+
+        [HttpDelete]
+        [Route("{Id:guid}")]
+        public async Task<IActionResult> DeleteRegionAsync(Guid Id)
+        {
+            var region = await _regionRepository.DeleteRegionAsync(Id);
+
+            if (region == null)
+            {
+                return NotFound();
+            }
+
+            var regionModel = new RegionModel()
+            {
+                RegID = region.RegID,
+                Code = region.Code,
+                Area = region.Area,
+                Name = region.Name,
+                Lat = region.Lat,
+                Long = region.Long,
+                Population = region.Population
+            };
+
+            return Ok(regionModel);
+        }
+
+        [HttpPut]
+        [Route("{Id:guid}")]
+        public async Task<IActionResult> UpdateRegionAsync([FromRoute]Guid Id, [FromBody]UpdateRegionModel updateModel)
+        {
+            // Convert DTO to Domain model
+
+            var region = new Region()
+            {
+                Code = updateModel.Code,
+                Area = updateModel.Area,
+                Name = updateModel.Name,
+                Lat = updateModel.Lat,
+                Long = updateModel.Long,
+                Population = updateModel.Population
+            };
+
+            // Update to repository..
+            region = await _regionRepository.UpdateRegionAsync(Id, region);
+
+            // Null check..
+            if (region == null)
+            {
+                return NotFound();
+            }
+
+            // Convert Domain to DTO..
+
+            var updateRegModel = new RegionModel()
+            {
+                RegID = region.RegID,
+                Code = region.Code,
+                Area = region.Area,
+                Name = region.Name,
+                Lat = region.Lat,
+                Long = region.Long,
+                Population = region.Population
+            };
+
+            // return OK...
+            return Ok(updateRegModel);
         }
     }
 }
