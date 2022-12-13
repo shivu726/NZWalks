@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using NZWalks.Models.Domain;
-using NZWalks.Models.Domain.DTO;
+using NZWalks.Models.DTO;
 using NZWalks.Repository;
 
 namespace NZWalks.Controllers
@@ -49,9 +49,9 @@ namespace NZWalks.Controllers
         }
 
         [HttpGet]
-        [Route("{Id:guid}")]
+        [Route("{Id:int}")]
         [ActionName("GetRegionById")]
-        public async Task<IActionResult> GetRegionById(Guid Id)
+        public async Task<IActionResult> GetRegionById(int Id)
         {
             var region = await _regionRepository.GetRegionAsync(Id);
 
@@ -101,8 +101,8 @@ namespace NZWalks.Controllers
         }
 
         [HttpDelete]
-        [Route("{Id:guid}")]
-        public async Task<IActionResult> DeleteRegionAsync(Guid Id)
+        [Route("{Id:int}")]
+        public async Task<IActionResult> DeleteRegionAsync(int Id)
         {
             var region = await _regionRepository.DeleteRegionAsync(Id);
 
@@ -126,8 +126,8 @@ namespace NZWalks.Controllers
         }
 
         [HttpPut]
-        [Route("{Id:guid}")]
-        public async Task<IActionResult> UpdateRegionAsync([FromRoute]Guid Id, [FromBody]UpdateRegionModel updateModel)
+        [Route("{Id:int}")]
+        public async Task<IActionResult> UpdateRegionAsync([FromRoute] int Id, [FromBody]UpdateRegionModel updateModel)
         {
             // Convert DTO to Domain model
 

@@ -5,7 +5,7 @@ namespace NZWalks.Models.Domain
     public class Region
     {
         [Key]
-        public Guid RegID { get; set; }
+        public int RegID { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public double Area { get; set; }

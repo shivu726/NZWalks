@@ -6,12 +6,12 @@ namespace NZWalks.Repository
     {
        Task<IEnumerable<Region>> GetALlRegionsAsync();
 
-        Task<Region> GetRegionAsync(Guid Id);
+        Task<Region> GetRegionAsync(int Id);
 
         Task<Region> AddRegionAsync(Region region);
 
-        Task<Region> DeleteRegionAsync(Guid Id);
+        Task<Region> DeleteRegionAsync(int Id);
 
-        Task<Region> UpdateRegionAsync(Guid Id, Region region);
+        Task<Region> UpdateRegionAsync(int Id, Region region);
     }
 }

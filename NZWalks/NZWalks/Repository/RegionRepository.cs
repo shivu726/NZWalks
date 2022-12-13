@@ -15,13 +15,13 @@ namespace NZWalks.Repository
 
         public async Task<Region> AddRegionAsync(Region region)
         {
-            region.RegID = Guid.NewGuid();
+            //region.RegID = Guid.NewGuid();
             await _dbContext.Regions.AddAsync(region);
             await _dbContext.SaveChangesAsync();
             return region;
         }
 
-        public async Task<Region> DeleteRegionAsync(Guid Id)
+        public async Task<Region> DeleteRegionAsync(int Id)
         {
             var region = await _dbContext.Regions.FindAsync(Id);
 
@@ -36,12 +36,12 @@ namespace NZWalks.Repository
             return await _dbContext.Regions.ToListAsync();
         }
 
-        public async Task<Region> GetRegionAsync(Guid Id)
+        public async Task<Region> GetRegionAsync(int Id)
         {
             return await _dbContext.Regions.FirstOrDefaultAsync(x => x.RegID == Id);
         }
 
-        public async Task<Region> UpdateRegionAsync(Guid Id, Region region)
+        public async Task<Region> UpdateRegionAsync(int Id, Region region)
         {
             var updateRegion = await _dbContext.Regions.FindAsync(Id);
 

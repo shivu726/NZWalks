@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace NZWalks.Models.Domain
+﻿namespace NZWalks.Models.DTO
 {
-    public class Walk
+    public class WalkModel
     {
-        [Key]
         public int WalkID { get; set; }
         public string Name { get; set; }
         public double Length { get; set; }
@@ -14,9 +11,7 @@ namespace NZWalks.Models.Domain
 
         // Navigation property
 
-        public Region Regions { get; set; }
-        public WalkDifficulty WalkDifficulties { get; set; }
-
-
+        public RegionModel Regions { get; set; }
+        public WalkDifficultyModel WalkDifficulties { get; set; }
     }
 }

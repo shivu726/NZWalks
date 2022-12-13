@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -15,7 +14,8 @@ namespace NZWalks.Migrations
                 name: "Regions",
                 columns: table => new
                 {
-                    RegID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RegID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Area = table.Column<double>(type: "float", nullable: false),
@@ -29,14 +29,28 @@ namespace NZWalks.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WalkDifficulties",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WalkDifficulties", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Walks",
                 columns: table => new
                 {
-                    WalkID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WalkID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Length = table.Column<double>(type: "float", nullable: false),
-                    RegionID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WalkDiffID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    RegionID = table.Column<int>(type: "int", nullable: false),
+                    WalkDifficultyID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,23 +61,11 @@ namespace NZWalks.Migrations
                         principalTable: "Regions",
                         principalColumn: "RegID",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "walkDifficulties",
-                columns: table => new
-                {
-                    WalkID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_walkDifficulties", x => x.WalkID);
                     table.ForeignKey(
-                        name: "FK_walkDifficulties_Walks_WalkID",
-                        column: x => x.WalkID,
-                        principalTable: "Walks",
-                        principalColumn: "WalkID",
+                        name: "FK_Walks_WalkDifficulties_WalkDifficultyID",
+                        column: x => x.WalkDifficultyID,
+                        principalTable: "WalkDifficulties",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -71,19 +73,24 @@ namespace NZWalks.Migrations
                 name: "IX_Walks_RegionID",
                 table: "Walks",
                 column: "RegionID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Walks_WalkDifficultyID",
+                table: "Walks",
+                column: "WalkDifficultyID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "walkDifficulties");
-
-            migrationBuilder.DropTable(
                 name: "Walks");
 
             migrationBuilder.DropTable(
                 name: "Regions");
+
+            migrationBuilder.DropTable(
+                name: "WalkDifficulties");
         }
     }
 }
